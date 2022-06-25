@@ -11,17 +11,46 @@ function main() {
       "camera",
       -Math.PI / 2,
       Math.PI / 2.5,
-      3,
+      4,
       new BABYLON.Vector3(0, 0, 0)
     );
     camera.attachControl(canvas, true);
     const light = new BABYLON.HemisphericLight(
       "light",
-      new BABYLON.Vector3(0, 1, 0)
+      new BABYLON.Vector3(1, 1, 0)
     );
 
     const car = buildCar();
-    car.rotation.x = -Math.PI / 2;
+    car.rotation = new BABYLON.Vector3(-Math.PI / 2, 0, Math.PI / 2);
+
+    const animCar = new BABYLON.Animation(
+      "carAnimation",
+      "position.z",
+      30,
+      BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+      BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+    );
+
+    const carKeys = [];
+    carKeys.push({
+      frame: 0,
+      value: 8,
+    });
+    carKeys.push({
+      frame: 150,
+      value: -7,
+    });
+    carKeys.push({
+      frame: 200,
+      value: -7,
+    });
+
+    animCar.setKeys(carKeys);
+
+    car.animations = [];
+    car.animations.push(animCar);
+
+    scene.beginAnimation(car, 0, 200, true);
 
     const wheelRB = scene.getMeshByName("wheelRB");
     const wheelRF = scene.getMeshByName("wheelRF");
